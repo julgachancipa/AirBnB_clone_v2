@@ -11,6 +11,8 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from shlex import split
+import shlex
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -41,13 +43,29 @@ class HBNBCommand(cmd.Cmd):
         try:
             if not line:
                 raise SyntaxError()
-            my_list = line.split(" ")
+            my_list = shlex.split(line)
             obj = eval("{}()".format(my_list[0]))
 
             if len(my_list) > 1:
                 for i in range(1, len(my_list)):
                     key_val = my_list[i].split("=")
-                    setattr(obj, key_val[0], key_val[1])
+                    norm_var = key_val[1]
+                    norm_var = key_val[1].replace("_", " ")
+                    norm_var = norm_var.replace("\"", "")
+
+                    try:
+                        norm_var = int(key_val[1])
+                    except:
+                        pass
+
+                    try:
+                        if not isinstance(norm_var, int):
+                            norm_var = float(key_val[1])
+                    except:
+                        pass
+
+                    print(type(norm_var))
+                    setattr(obj, key_val[0], norm_var)
 
             obj.save()
 
