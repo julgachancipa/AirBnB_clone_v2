@@ -43,7 +43,14 @@ class HBNBCommand(cmd.Cmd):
                 raise SyntaxError()
             my_list = line.split(" ")
             obj = eval("{}()".format(my_list[0]))
+
+            if len(my_list) > 1:
+                for i in range(1, len(my_list)):
+                    key_val = my_list[i].split("=")
+                    setattr(obj, key_val[0], key_val[1])
+
             obj.save()
+
             print("{}".format(obj.id))
         except SyntaxError:
             print("** class name missing **")
