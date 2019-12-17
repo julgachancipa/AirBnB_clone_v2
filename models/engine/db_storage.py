@@ -40,7 +40,7 @@ class DBStorage:
 
     def all(self, cls=None):
         obs = []
-        class_list = [State, City, User]
+        class_list = [State, City, User, Place]
         dict_all = {}
 
         try:
