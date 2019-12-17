@@ -3,7 +3,6 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
-from models.engine.file_storage import FileStorage
 import os
 
 
@@ -41,9 +40,8 @@ class Place(BaseModel, Base):
     else:
         @property
         def reviews(self):
-            fs = FileStorage()
             l = []
-            for k, v in fs.all(Review).items():
+            for k, v in models.storage.all(Review).items():
                 if v['place_id'] == self.id:
                     l.append(v)
             return(l)
