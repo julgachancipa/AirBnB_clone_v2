@@ -1,0 +1,48 @@
+#!/usr/bin/python3
+"""
+DBStorage
+"""
+from models.base_model import Base
+from models.state import State
+from models.city import City
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import os
+
+
+class DBStorage(Base):
+    __engine = None
+    __session = None
+
+    def __init__(self):
+        HBNB_MYSQL_USER = os.getenv('HBNB_MYSQL_USER')
+        HBNB_MYSQL_PWD = os.getenv('HBNB_MYSQL_PWD')
+        HBNB_MYSQL_HOST = os.getenv('HBNB_MYSQL_HOST')
+        HBNB_MYSQL_DB = os.getenv('HBNB_MYSQL_DB')
+        HBNB_ENV = os.getenv('HBNB_ENV')
+        
+        try:
+            self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'
+                                          .format(HBNB_MYSQL_USER, HBNB_MYSQL_PWD,
+                                                  HBNB_MYSQL_HOST, HBNB_MYSQL_DB),
+                                          pool_pre_ping=True)
+            Base.metadata.create_all(engine)
+        except:
+            raise
+            print(":(")
+
+    def all(self, cls=None):
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        table_list = Base.metadata.tables.keys()
+        objs = []
+        dict_all = {}
+
+        if cls is None:
+            for tab in table_list:
+                objs.append(session.query(tab).all())
+
+            for obj in objs:
+                obj_id = 
+                key = obj.to_dict()['__class__'] + '.' + 
+                
