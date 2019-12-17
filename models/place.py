@@ -3,6 +3,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
+from models.engine.file_storage import FileStorage
+import os
 
 
 class Place(BaseModel, Base):
@@ -32,8 +34,16 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
-    reviews = relationship("Review", cascade="delete", backref="place")
 
-    @property
-    def reviews(self):
-        return(self.reviews)
+    HBNB_ENV = os.getenv('HBNB_ENV')
+    if HBNB_ENV is 'db':
+        reviews = relationship("Review", cascade="delete", backref="place")
+    else:
+        @property
+        def reviews(self):
+            fs = FileStorage()
+            l = []
+            for k, v in fs.all(Review).items():
+                if v['place_id'] == self.id:
+                    l.append(v)
+            return(l)
