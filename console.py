@@ -64,7 +64,6 @@ class HBNBCommand(cmd.Cmd):
                     except:
                         pass
 
-                    print(type(norm_var))
                     setattr(obj, key_val[0], norm_var)
 
             obj.save()
