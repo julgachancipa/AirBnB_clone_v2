@@ -40,13 +40,13 @@ class DBStorage:
 
     def all(self, cls=None):
         obs = []
-        class_list = BaseModel.__subclasses__()
+        class_list = [State, City]
         dict_all = {}
 
         try:
             if cls is None:
                 for tab in class_list:
-                    obs.append(self.__session.query(State).all())
+                    obs.append(self.__session.query(tab).all())
                 objs = [item for sublist in obs for item in sublist]
 
                 for obj in objs:
