@@ -75,8 +75,6 @@ class DBStorage:
         except:
             raise
             print(":(")
-        finally:
-            self.__session.close()
 
     def delete(self, obj=None):
         try:
