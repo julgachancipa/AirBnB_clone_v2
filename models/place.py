@@ -2,6 +2,8 @@
 """This is the place class"""
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy.orm import relationship
+import os
 
 
 class Place(BaseModel, Base):
@@ -31,3 +33,17 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
+    amenity_ids = []
+
+    HBNB_TYPE_STORAGE = os.getenv('HBNB_TYPE_STORAGE')
+    if HBNB_TYPE_STORAGE == 'db':
+        reviews = relationship("Review", cascade="all, delete-orphan",
+                               backref="place")
+    else:
+        @property
+        def reviews(self):
+            l = []
+            for k, v in models.storage.all(Review).items():
+                if v.place_id == self.id:
+                    l.append(v)
+            return(l)

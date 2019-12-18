@@ -40,7 +40,7 @@ class DBStorage:
 
     def all(self, cls=None):
         obs = []
-        class_list = [State, City, User, Place]
+        class_list = [State, City, User, Place, Review]
         dict_all = {}
 
         try:
@@ -49,7 +49,10 @@ class DBStorage:
                     obs.append(self.__session.query(tab).all())
                 objs = [item for sublist in obs for item in sublist]
 
-                for obj in objs:
+            else:
+                objs = self.__session.query(cls).all()
+
+            for obj in objs:
                     obj_id = getattr(obj, 'id')
                     key = obj.to_dict()['__class__'] + '.' + obj_id
                     dict_all[key] = obj
@@ -58,8 +61,6 @@ class DBStorage:
         except:
             raise
             print(":(")
-        finally:
-            self.__session.close()
 
     def new(self, obj):
         try:
@@ -89,8 +90,6 @@ class DBStorage:
         except:
             raise
             print(":(")
-        finally:
-            self.__session.close()
 
     def reload(self):
         try:
