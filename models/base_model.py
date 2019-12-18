@@ -30,9 +30,10 @@ class BaseModel:
             updated_at: updated date
         """
         if kwargs:
-            for key, value in kwards.items():
-                if key == id:
-                    flag = 1;
+            flag = 0
+            for key, value in kwargs.items():
+                if key == "id":
+                    flag = 1
             if flag == 0:
                 self.id = str(uuid.uuid4())
             for key, value in kwargs.items():
