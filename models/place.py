@@ -37,7 +37,8 @@ class Place(BaseModel, Base):
 
     HBNB_TYPE_STORAGE = os.getenv('HBNB_TYPE_STORAGE')
     if HBNB_TYPE_STORAGE == 'db':
-        reviews = relationship("Review", cascade="all, delete-orphan", backref="place")
+        reviews = relationship("Review", cascade="all, delete-orphan",
+                               backref="place")
     else:
         @property
         def reviews(self):
