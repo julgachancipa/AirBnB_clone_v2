@@ -43,6 +43,6 @@ class Place(BaseModel, Base):
         def reviews(self):
             l = []
             for k, v in models.storage.all(Review).items():
-                if v['place_id'] == self.id:
+                if v.place_id == self.id:
                     l.append(v)
             return(l)
