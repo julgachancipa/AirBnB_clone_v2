@@ -63,10 +63,10 @@ class Place(BaseModel, Base):
         def amenity_ids(self):
             for k, v in models.storage.all(Amenity).items():
                 if v.place_id == self.id:
-                    amenity_ids.append(v)
-            return amenity_ids
+                    self.amenity_ids.append(v)
+            return self.amenity_ids
 
         @amenity_ids.setter
         def amenity_ids(self, value):
             if 'Amenity' in value:
-                amenity_ids.append(value)
+                self.amenity_ids.append(value)
