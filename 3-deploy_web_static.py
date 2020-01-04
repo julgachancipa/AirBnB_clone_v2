@@ -2,15 +2,17 @@
 """Do deploy static"""
 from fabric.api import *
 import os.path
-import os
 import re
+from datetime import datetime
 
 
 env.hosts = ['35.229.86.70', '35.237.216.255']
+env.user = 'ubuntu'
 
 
 def do_pack():
     """Compress files"""
+
     try:
         local("mkdir -p versions")
         now = datetime.now()
