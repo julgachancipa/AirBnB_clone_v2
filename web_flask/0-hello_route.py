@@ -6,7 +6,7 @@ app.url_map.strict_slashes = False
 
 
 @app.route('/')
-def hello_world():
+def hello_hbnb():
     return 'Hello HBNB!'
 
 if __name__ == '__main__':
