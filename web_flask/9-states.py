@@ -35,7 +35,6 @@ def cities_st_l(id):
         if(st[0] == id):
             name = st[1]
 
-    print('>>>', name)
     return render_template('9-states.html', states=states,
                            filt_state=id, cities=cities,
                            name=name)
