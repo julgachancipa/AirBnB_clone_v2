@@ -50,7 +50,7 @@ class DBStorage:
                 objs = [item for sublist in obs for item in sublist]
 
             else:
-                objs = self.__session.query(cls).all()
+                objs = self.__session.query(eval(cls)).all()
 
             for obj in objs:
                     obj_id = getattr(obj, 'id')
@@ -101,10 +101,7 @@ class DBStorage:
 
     def close(self):
         try:
-            Base.metadata.create_all(self.__engine)
-            Session = scoped_session(sessionmaker(bind=self.__engine,
-                                                  expire_on_commit=False))
-            self.__session = self.remove()
+            self.__session.close()
         except:
             raise
             print(":(")

@@ -3,7 +3,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-
+import models
+import shlex
 
 class State(BaseModel, Base):
     """This is the class for State
@@ -18,4 +19,15 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
-        return(self.cities)
+        var = models.storage.all()
+        lista = []
+        res = []
+        for key in var:
+            city = key.replace('.', ' ')
+            city = shlex.split(city)
+            if (city[0] == 'City'):
+                lista.append(var[key])
+        for elem in lista:
+            if (elem.state_id == self.id):
+                res.append(elem)
+        return(res)
