@@ -26,13 +26,11 @@ def cities_st_l():
 
     cities_id_nm = []
     all_cities = storage.all('City')
-    print(all_cities)
     for i in all_cities:
         cities_id_nm.append((all_cities[i].id, all_cities[i].name,
                              all_cities[i].state_id))
     cities = sorted(cities_id_nm, key=lambda x: x[1])
 
-    print(cities)
     return render_template('8-cities_by_states.html', states=states,
                            cities=cities)
 
