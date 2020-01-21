@@ -25,83 +25,55 @@ class DBStorage:
         HBNB_MYSQL_DB = os.getenv('HBNB_MYSQL_DB')
         HBNB_ENV = os.getenv('HBNB_ENV')
 
-        try:
-            self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'
-                                          .format(HBNB_MYSQL_USER,
-                                                  HBNB_MYSQL_PWD,
-                                                  HBNB_MYSQL_HOST,
-                                                  HBNB_MYSQL_DB),
-                                          pool_pre_ping=True)
-            if HBNB_ENV is 'test':
-                Base.metadata.drop_all(bind=self.__engine)
-        except:
-            raise
-            print(":(")
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}:3306/{}'
+                                      .format(HBNB_MYSQL_USER,
+                                              HBNB_MYSQL_PWD,
+                                              HBNB_MYSQL_HOST,
+                                              HBNB_MYSQL_DB),
+                                      pool_pre_ping=True)
+        if HBNB_ENV is 'test':
+            Base.metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
         obs = []
         class_list = [State, City, User, Place, Review, Amenity]
         dict_all = {}
 
-        try:
-            if cls is None:
-                for tab in class_list:
-                    obs.append(self.__session.query(tab).all())
+        if cls is None:
+            for tab in class_list:
+                obs.append(self.__session.query(tab).all())
                 objs = [item for sublist in obs for item in sublist]
 
-            else:
-                objs = self.__session.query(eval(cls)).all()
+        else:
+            objs = self.__session.query(eval(cls)).all()
 
-            for obj in objs:
-                    obj_id = getattr(obj, 'id')
-                    key = obj.to_dict()['__class__'] + '.' + obj_id
-                    dict_all[key] = obj
+        for obj in objs:
+            obj_id = getattr(obj, 'id')
+            key = obj.to_dict()['__class__'] + '.' + obj_id
+            dict_all[key] = obj
 
-            return dict_all
-        except:
-            raise
-            print(":(")
+        return dict_all
 
     def new(self, obj):
-        try:
-            self.__session.add(obj)
-        except:
-            raise
-            print(":(")
+        self.__session.add(obj)
 
     def save(self):
-        try:
-            self.__session.commit()
-        except:
-            raise
-            print(":(")
+        self.__session.commit()
 
     def delete(self, obj=None):
-        try:
-            if obj is not None:
-                obj_id = getattr(obj, 'id')
-                q = self.__session.query(type(obj).__name__)\
-                                  .filter(type(obj).__name__.id == obj_id)\
-                                  .first()
-                self.__session.delete(q)
-                self.__session.commit()
-        except:
-            raise
-            print(":(")
+        if obj is not None:
+            obj_id = getattr(obj, 'id')
+            q = self.__session.query(type(obj).__name__)\
+                              .filter(type(obj).__name__.id == obj_id)\
+                              .first()
+            self.__session.delete(q)
+            self.__session.commit()
 
     def reload(self):
-        try:
-            Base.metadata.create_all(self.__engine)
-            Session = scoped_session(sessionmaker(bind=self.__engine,
-                                                  expire_on_commit=False))
-            self.__session = Session()
-        except:
-            raise
-            print(":(")
+        Base.metadata.create_all(self.__engine)
+        Session = scoped_session(sessionmaker(bind=self.__engine,
+                                              expire_on_commit=False))
+        self.__session = Session()
 
     def close(self):
-        try:
-            self.__session.close()
-        except:
-            raise
-            print(":(")
+        self.__session.close()
